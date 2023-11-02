@@ -15,6 +15,10 @@ class Book extends Model
         return $this->hasMany(Review::class);
     }
 
+    protected $fillable = [
+        'title',
+        'author',
+    ];
     public function scopeTitle(Builder $query, string $title): Builder
     {
         return $query
@@ -55,8 +59,40 @@ class Book extends Model
             $query->where('created_at', '<=', $to);
         }
     }
-    protected $fillable = [
-        'title',
-        'author',
-    ];
+
+    public function scopePopularLastMonth(Builder $query): Builder
+    {
+        return $query
+            ->popular(now()->subMonth(), now())
+            ->HighestRated(now()->subMonth(), now())
+            ->minReviews(2)
+        ;
+    }
+
+    public function scopePopularLast6Months(Builder $query): Builder
+    {
+        return $query
+            ->popular(now()->subMonths(6), now())
+            ->HighestRated(now()->subMonths(6), now())
+            ->minReviews(5)
+        ;
+    }
+
+    public function scopeHighestRatedLastMonth(Builder $query): Builder
+    {
+        return $query
+            ->HighestRated(now()->subMonth(), now())
+            ->popular(now()->subMonth(), now())
+            ->minReviews(2)
+        ;
+    }
+
+    public function scopeHighestRatedLast6Months(Builder $query): Builder
+    {
+        return $query
+            ->HighestRated(now()->subMonths(6), now())
+            ->popular(now()->subMonths(6), now())
+            ->minReviews(5)
+        ;
+    }
 }
