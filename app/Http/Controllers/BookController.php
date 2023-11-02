@@ -28,7 +28,13 @@ class BookController extends Controller
             default => $books->latest()
         };
 
-        $books = $books->get();
+        $cacheKey = 'books:' . $filter . ':' . $title;
+        $books = cache()->remember(
+            $cacheKey,
+            now()->addMinutes(10),
+            fn() => $books->get(),
+        );
+
 
         return view('books.index', compact('books'));
     }
