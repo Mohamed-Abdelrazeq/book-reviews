@@ -13,4 +13,9 @@ class Review extends Model
     {
         return $this->belongsTo(Book::class);
     }
+
+    protected $fillable = [
+        'review',
+        'rating',
+    ];
 }
