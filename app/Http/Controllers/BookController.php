@@ -17,7 +17,7 @@ class BookController extends Controller
         $books = Book::when(
             $title,
             fn($query, $title) => $query->title($title)
-        );
+        )->get();
 
         return view('books.index', compact('books'));
     }
