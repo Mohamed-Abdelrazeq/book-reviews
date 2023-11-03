@@ -19,6 +19,13 @@ class Book extends Model
         'title',
         'author',
     ];
+
+    protected static function booted()
+    {
+        static::updated(fn(Book $book) => cache()->forget('book:' . $book->id));
+        static::deleted(fn(Book $book) => cache()->forget('book:' . $book->id));
+    }
+
     public function scopeTitle(Builder $query, string $title): Builder
     {
         return $query

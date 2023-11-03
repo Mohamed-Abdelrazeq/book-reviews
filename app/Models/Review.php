@@ -17,12 +17,8 @@ class Review extends Model
 
     protected static function booted()
     {
-        static::updated(function ($review) {
-            cache()->forget('book:' . $review->book_id);
-        });
-        static::deleted(function ($review) {
-            cache()->forget('book:' . $review->book_id);
-        });
+        static::updated(fn(Review $review) => cache()->forget('book:' . $review->book_id));
+        static::deleted(fn(Review $review) => cache()->forget('book:' . $review->book_id));
     }
     protected $fillable = [
         'review',
